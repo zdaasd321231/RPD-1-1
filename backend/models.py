@@ -216,6 +216,19 @@ class AppSettings(BaseModel):
     updated_by: str
 
 # Response Models
+class UserResponse(BaseModel):
+    id: str
+    username: str
+    email: EmailStr
+    role: UserRole = UserRole.user
+    totp_enabled: bool = False
+    allowed_ips: List[str] = []
+    last_login: Optional[datetime] = None
+    failed_login_attempts: int = 0
+    locked_until: Optional[datetime] = None
+    created_at: datetime
+    updated_at: datetime
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
