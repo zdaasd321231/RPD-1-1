@@ -139,7 +139,8 @@ class RDPStealthAPITester:
             "Logs",
             "GET",
             "logs",
-            200
+            200,
+            params={"limit": 10}
         )
 
     def test_settings(self):
