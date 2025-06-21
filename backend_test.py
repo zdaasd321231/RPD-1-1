@@ -12,7 +12,7 @@ class RDPStealthAPITester:
         self.tests_passed = 0
         self.headers = {'Content-Type': 'application/json'}
 
-    def run_test(self, name, method, endpoint, expected_status, data=None):
+    def run_test(self, name, method, endpoint, expected_status, data=None, params=None):
         """Run a single API test"""
         url = f"{self.api_url}/{endpoint}"
         
@@ -24,11 +24,11 @@ class RDPStealthAPITester:
         
         try:
             if method == 'GET':
-                response = requests.get(url, headers=self.headers)
+                response = requests.get(url, headers=self.headers, params=params)
             elif method == 'POST':
-                response = requests.post(url, json=data, headers=self.headers)
+                response = requests.post(url, json=data, headers=self.headers, params=params)
             elif method == 'DELETE':
-                response = requests.delete(url, headers=self.headers)
+                response = requests.delete(url, headers=self.headers, params=params)
 
             success = response.status_code == expected_status
             if success:
