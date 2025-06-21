@@ -20,13 +20,23 @@ async def login(login_data: UserLogin, request: Request):
     
     return await auth_service.authenticate_user(login_data, client_ip)
 
-@router.get("/me", response_model=User)
+@router.get("/me", response_model=UserResponse)
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     """Get current user information"""
-    # Don't return password hash
-    user_dict = current_user.dict()
-    user_dict.pop('password_hash', None)
-    return User(**user_dict)
+    # Convert to UserResponse (without password_hash)
+    return UserResponse(
+        id=current_user.id,
+        username=current_user.username,
+        email=current_user.email,
+        role=current_user.role,
+        totp_enabled=current_user.totp_enabled,
+        allowed_ips=current_user.allowed_ips,
+        last_login=current_user.last_login,
+        failed_login_attempts=current_user.failed_login_attempts,
+        locked_until=current_user.locked_until,
+        created_at=current_user.created_at,
+        updated_at=current_user.updated_at
+    )
 
 @router.post("/setup-2fa", response_model=TOTPSetup)
 async def setup_two_factor(current_user: User = Depends(get_current_user)):
